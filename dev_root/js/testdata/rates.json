@@ -1,0 +1,20 @@
+{
+   "isError":false,
+   "errorMessage":"",
+   "result":[
+      {
+         "someId":1,
+         "someCode":"10",
+         "someRate":"7.59",
+         "someType":"DR",
+         "someDescr":"Description of any key1"
+      },
+      {
+         "someId":2,
+         "someCode":"20",
+         "someRate":"1.59",
+         "someType":"DT",
+         "someDescr":"Description of any key2"
+      }
+   ]
+}
