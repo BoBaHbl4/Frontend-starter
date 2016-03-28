@@ -2,7 +2,7 @@
     'use strict';
     angular
         .module('someApp')
-        .filter('someFilter', groupBy);
+        .filter('someFilter', someFilter);
 
     function someFilter (){
         console.log('someFilter');

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="someApp">
 <head lang="eng">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Start Project Page</title>
     <!-- inject:css -->
+    <link rel="stylesheet" href="../css/common.min.css">
     <!-- endinject -->
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -14,7 +15,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>
+<body ng-controller="MainCtrl">
 
     <!-- Header -->
     <header ui-view="header" id="header"></header>
@@ -31,8 +32,18 @@
     <!-- Project Scripts -->
     <script src="../js/api-url-config.js"></script>
     <!-- vendor:js -->
+    <script src="../js/libs/jquery.min.js"></script>
+    <script src="../js/libs/bootstrap.min.js"></script>
+    <script src="../js/libs/angular.min.js"></script>
+    <script src="../js/libs/angular-animate.min.js"></script>
+    <script src="../js/libs/angular-touch.min.js"></script>
+    <script src="../js/libs/loading-bar.min.js"></script>
+    <script src="../js/libs/angular-ui-router.min.js"></script>
+    <script src="../js/libs/ui-bootstrap.min.js"></script>
+    <script src="../js/libs/ui-bootstrap-tpls.min.js"></script>
     <!-- endinject -->
     <!-- dev:js -->
+    <script src="../js/app.min.js"></script>
     <!-- endinject -->
 </body>
 </html>

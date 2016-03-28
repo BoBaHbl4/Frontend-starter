@@ -21,51 +21,52 @@
                 abstract: true,
                 views: {
                     'header': {
-                        templateUrl: '/'
+                        templateUrl: '../views/header.html'
                     },
                     'data-content':{
-                        templateUrl: '/'
+                        templateUrl: '../views/data-content.html'
                     },
                     'footer':{
-                        templateUrl: '/'
+                        templateUrl: '../views/footer.html'
                     }
                 }
             })
             .state('root.home', {
                 url: '/',
-                controller: 'MainController',
+                controller: 'MainCtrl',
                 views: {
                     'container@': {
-                        templateUrl: '../../build/views/index.html'
+                        templateUrl: '../views/index.html'
                     },
-                    'customer-profile-info':{
-                        templateUrl: '/'
+                    'some-inside-tmpl':{
+                        templateUrl: '../views/some-inside-tmpl.html'
                     }
                 }
             })
-            .state('error', {
-                abstract: true,
-                url: '',
-                controller: 'MainController',
-                views: {
-                    'error': {
-                        templateUrl: '/'
-                    }
-                }
-            })
-            .state('error.status', {
-                url: '/error',
-                controller: 'MainController',
-                views: {
-                    'container@': {
-                        templateUrl: '/'
-                    },
-                    'error': {
-                        templateUrl: '/',
-                        controller: 'MainController'
-                    }
-                }
-            })
+            // Error state sample
+            // .state('error', {
+            //     abstract: true,
+            //     url: '',
+            //     controller: 'MainCtrl',
+            //     views: {
+            //         'error': {
+            //             templateUrl: '/'
+            //         }
+            //     }
+            // })
+            // .state('error.status', {
+            //     url: '/error',
+            //     controller: 'MainCtrl',
+            //     views: {
+            //         'container@': {
+            //             templateUrl: '/'
+            //         },
+            //         'error': {
+            //             templateUrl: '/',
+            //             controller: 'MainCtrl'
+            //         }
+            //     }
+            // })
         ;
     }
 

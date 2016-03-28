@@ -8,6 +8,7 @@
     function MainCtrl (
         $scope,
         cfpLoadingBar,
+        appConstant,
         getService) {
 
         console.log('Main controller');
