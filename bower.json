@@ -1,6 +1,6 @@
 {
-  "name": "AboutMeProject",
-  "description": "",
+  "name": "Frontend-starter",
+  "description": "Starting pack for angularjs project with default nodejs/bower packages and gulp tasks.",
   "main": "",
   "authors": [
     "Vladimir Econom <BoBaHbl4@gmail.com>"
