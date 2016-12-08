@@ -1,5 +1,6 @@
 (function() {
     'use strict';
+    config.$inject = ["$stateProvider", "$urlRouterProvider", "cfpLoadingBarProvider"];
     angular
         .module('someApp')
         .config(config);

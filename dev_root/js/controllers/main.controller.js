@@ -1,6 +1,7 @@
 (function() {
     'use strict';
 
+    MainCtrl.$inject = ["$scope", "cfpLoadingBar", "appConstant", "getService"];
     angular
         .module('someApp')
         .controller('MainCtrl', MainCtrl);

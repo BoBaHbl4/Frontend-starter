@@ -1,5 +1,6 @@
 (function() {
     'use strict';
+    getService.$inject = ["$http", "$q", "$state", "$timeout"];
     angular
         .module('someApp')
         .factory('getService', getService);
