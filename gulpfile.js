@@ -80,6 +80,9 @@ gulp.task('setup-dev', [
     console.log('Setup of Development Environment starts!')
 });
 
+/**
+ * Set Up Starter Task to create all environment in Dev
+ */
 gulp.task( 'start-setup-dev', ['add-libs-to-project', 'setup-dev'], function () {
     console.log('Development Environment created!')
 });
