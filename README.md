@@ -2,7 +2,7 @@
 Starting pack for angularjs project with default nodejs/bower packages and gulp tasks.
 
 ### Version
-2.0.0
+2.0.1
 
 ### Installation notes
 'Frontend-starter' requires [node, npm](https://nodejs.org/), [bower](http://bower.io/) and [git](https://git-scm.com/) (follow links to read installation guides).

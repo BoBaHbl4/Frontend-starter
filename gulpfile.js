@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var browserSync = require("browser-sync");
+var historyApiFallback = require('connect-history-api-fallback');
 var reload      = browserSync.reload;
 var less = require("gulp-less");
 var cleanCSS = require('gulp-clean-css');
@@ -9,6 +10,7 @@ var inject = require('gulp-inject');
 var concat = require('gulp-concat');
 var print = require('gulp-print');
 var angularFilesort = require('gulp-angular-filesort');
+var autoprefixer = require('gulp-autoprefixer');
 var uglify = require('gulp-uglify');
 var ngAnnotate = require('gulp-ng-annotate');
 var sourcemaps = require('gulp-sourcemaps');
@@ -54,7 +56,6 @@ gulp.task('add-libs-to-project', function () {
      * Copy all 3rd-party js source to Dev dir
      */
     return gulp.src([
-        './bower_components/jquery/dist/jquery.min.js',
         './bower_components/bootstrap/dist/js/bootstrap.min.js',
         './bower_components/angular/angular.min.js',
         './bower_components/angular-animate/angular-animate.min.js',
@@ -80,9 +81,6 @@ gulp.task('setup-dev', [
     console.log('Setup of Development Environment starts!')
 });
 
-/**
- * Set Up Starter Task to create all environment in Dev
- */
 gulp.task( 'start-setup-dev', ['add-libs-to-project', 'setup-dev'], function () {
     console.log('Development Environment created!')
 });
@@ -93,16 +91,34 @@ gulp.task( 'start-setup-dev', ['add-libs-to-project', 'setup-dev'], function () 
  * Concat files
  *
  */
-gulp.task('lib-less-dev', ['add-libs-to-project'], function () {
+gulp.task('lib-less-dev', function () {
     return gulp.src([
         './dev_root/css/libs/bootstrap/bootstrap.less',
-        './dev_root/css/libs/font-awesome/font-awesome.less',
+        //'./dev_root/css/libs/font-awesome/font-awesome.less',
+        './dev_root/css/libs/feather.css',
         './dev_root/css/libs/loading-bar.css'
     ])
         .pipe(less())
         .pipe(concat('lib-styles.css'))
         .pipe(gulp.dest('./dev_root/css'));
 });
+
+/**
+ * Compile lib *.less-files to css
+ * Concat files
+ */
+gulp.task('lib-less-update-dev', function () {
+    return gulp.src([
+        './dev_root/css/libs/bootstrap/bootstrap.less',
+        './dev_root/css/libs/font-awesome/font-awesome.less',
+        './dev_root/css/libs/reject.css',
+        './dev_root/css/libs/loading-bar.css'
+    ])
+        .pipe(less())
+        .pipe(concat('lib-styles.css'))
+        .pipe(gulp.dest('./dev_root/css'));
+});
+
 
 /**
  * Compile dev *.less-files to css
@@ -112,6 +128,7 @@ gulp.task('project-less-dev', function () {
     return gulp.src('./dev_root/css/less/*.less')
         .pipe(less())
         .pipe(concat('main.css'))
+        .pipe(autoprefixer())
         .pipe(gulp.dest('./dev_root/css'));
 });
 
@@ -128,15 +145,8 @@ gulp.task('css-inject-dev', [
     ]);
 
     return targetForCustomCss
-        .pipe(inject(customCssStream, { read: false, addRootSlash: false, relative: true })
-                //.pipe(print())
-                //.pipe(concat('common.min.css'))
-                //.pipe(cleanCSS())
-                //.pipe(gulp.dest('build/css')), { read: false, addRootSlash: false, relative: true })
-                //.pipe(gulp.dest('./dev_root/css')), { read: false, addRootSlash: false, relative: true })
-        )
+        .pipe(inject(customCssStream, { read: false, addRootSlash: false, relative: true }))
         .pipe(gulp.dest('./dev_root/views/'));
-        //.pipe(reload({stream:true}));
 });
 
 /**
@@ -145,15 +155,16 @@ gulp.task('css-inject-dev', [
 gulp.task('js-vendor-inject-dev', ['css-inject-dev'], function () {
     var targetForVendorJs = gulp.src('./dev_root/views/index.html');
     var vendorJsStream = gulp.src([
-            './bower_components/jquery/dist/jquery.min.js',
-            './bower_components/bootstrap/dist/js/bootstrap.min.js',
-            './bower_components/angular/angular.min.js',
-            './bower_components/angular-animate/angular-animate.min.js',
-            './bower_components/angular-touch/angular-touch.min.js',
-            './bower_components/angular-loading-bar/build/loading-bar.min.js',
-            './bower_components/angular-ui-router/release/angular-ui-router.min.js',
-            './bower_components/angular-bootstrap/ui-bootstrap.min.js',
-            './bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'])
+        './bower_components/jquery/dist/jquery.min.js',
+        './bower_components/modernizr/modernizr-custom.min.js',
+        './bower_components/bootstrap/dist/js/bootstrap.min.js',
+        './bower_components/angular/angular.min.js',
+        './bower_components/angular-animate/angular-animate.min.js',
+        './bower_components/angular-touch/angular-touch.min.js',
+        './bower_components/angular-loading-bar/build/loading-bar.min.js',
+        './bower_components/angular-ui-router/release/angular-ui-router.min.js',
+        './bower_components/angular-bootstrap/ui-bootstrap.min.js',
+        './bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'])
         .pipe(print())
         .pipe(gulp.dest('dev_root/js/libs'));
 
@@ -187,10 +198,12 @@ gulp.task('js-inject-dev', ['js-vendor-inject-dev'], function () {
  * Refresh View tasks for Dev dir
  */
 gulp.task('updateViewDev', function() {
-    gulp.src(['./dev_root/views/*.*', './dev_root/css/*.css'])
+    gulp.src([
+        './dev_root/views/*.*',
+        './dev_root/css/*.css'])
         .pipe(reload({stream:true}));
 });
-gulp.task('updateScriptDev', ['updateViewDev', 'js-inject-dev'], function() {
+gulp.task('updateScriptDev', ['updateViewDev'], function() {
     gulp.src('./dev_root/js/**/*.*')
         .pipe(reload({stream:true}));
 });
@@ -199,12 +212,32 @@ gulp.task('updateScriptDev', ['updateViewDev', 'js-inject-dev'], function() {
  * Static Dev Server
  */
 gulp.task('dev-server', function() {
+    /**
+     * Static Dev Server
+     */
     browserSync({
         server: {
-            baseDir: "./dev_root/"
+            baseDir: "./dev_root/",
+            index: "/views/index.html",
+            routes: {
+               "/": "index.html"
+            }
         },
         startPath: "/views/"
     });
+
+    // browserSync({
+    //     server: {
+    //         baseDir: "./dev_root/",
+    //         index: "/index.html",
+    //         routes: {
+    //            "/home": "index.html"
+    //         },
+    //         middleware: [ historyApiFallback() ]
+    //     },
+    //     startPath: "/"
+    // });
+
 });
 
 /**
@@ -212,19 +245,15 @@ gulp.task('dev-server', function() {
  */
 gulp.task('dev-start', [
     'dev-server',
-    'lib-less-dev',
-    'project-less-dev',
-    'css-inject-dev',
-    'js-vendor-inject-dev',
-    'js-inject-dev'], function() {
+    'lib-less-update-dev',
+    'project-less-dev'], function() {
     console.log('Gulp started!');
 
-    var devUpdate = ['lib-less-dev', 'project-less-dev', 'css-inject-dev', 'updateViewDev'];
+    var devUpdate = ['lib-less-update-dev', 'project-less-dev', 'updateViewDev'];
 
-    gulp.watch('./dev_root/css/*.less',devUpdate);
-    gulp.watch('./dev_root/css/less/*.less',devUpdate);
-    gulp.watch('./build/views/*.*',['updateViewDev']);
-    gulp.watch('./dev_root/js/**/*.js',['updateViewDev']);
+    gulp.watch(['./dev_root/css/*.less', './dev_root/css/less/*.less', './dev_root/css/libs/**/**/*.less', './dev_root/css/libs/**/*.less'],devUpdate);
+    gulp.watch(['./dev_root/views/**/*.*', './dev_root/views/*.*']).on('change', browserSync.reload);
+    gulp.watch('./dev_root/js/**/*.js',devUpdate);
 
 });
 
@@ -232,6 +261,7 @@ gulp.task('dev-start', [
 /**
  * **************************** *
  * Gulp Task for Build Version  *
+ * Under construction!          *
  * **************************** *
  */
 
@@ -316,7 +346,7 @@ gulp.task('build-server', function() {
         server: {
             baseDir: "./build/"
         },
-        startPath: "/views/"
+        startPath: "/"
     });
 });
 
